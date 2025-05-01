@@ -1,11 +1,10 @@
 import React from 'react'
 import logo from './../../assets/images/logoCine.png'
-import Home from '../../pages/Home/Home'
 import { NavLink } from 'react-router-dom'
 
 function Header() {
   return (
-    <header className='flex justify-between items-center p-4 bg-[#102A43]'>
+    <header className='flex justify-between items-center p-4 bg-[#141516]'>
         <img className='w-28' src={logo} alt='logo cine noticia'/>
 
         <nav className='me-20'>

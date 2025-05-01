@@ -1,5 +1,5 @@
 import React from 'react'
-import Filme from '../../pages/Filme/Filme';
+import Filme from './Filme'
 
 function Filmes(props) {
   
@@ -8,7 +8,7 @@ function Filmes(props) {
       {
         props.datasFilmes.map((filme)=>{
           return (
-            <Filme data={filme}/>
+            <Filme key={filme.id} data={filme}/>
           )
         })
       }
