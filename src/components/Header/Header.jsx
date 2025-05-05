@@ -16,6 +16,9 @@ function Header() {
                     <NavLink to='/favoritos'>Favoritos</NavLink>
                 </li>
                 <li>
+                    <NavLink to='/blog'>Blog</NavLink>
+                </li>
+                <li>
                     <NavLink to='/sobre'>Sobre</NavLink>
                 </li>
             </ul>

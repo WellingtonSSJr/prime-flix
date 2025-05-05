@@ -1,19 +1,33 @@
 import React from 'react'
-import { getAll, getMoviePlaying } from '../../services/moviesApi'
+import { getAll, getMoviePlaying, getMoviesPopular } from '../../services/moviesApi'
 import Filmes from '../../components/Filmes/Filmes'
 import api from '../../services/api'
+import Section from '../../components/Section/SectionFilms'
+import SectionFilms from '../../components/Section/SectionFilms'
 
 function Home() {
   
   const [filmes, setFilmes] = React.useState([])
   const [capa, setCapa] = React.useState([])
   const [favorite, setFavorite] = React.useState(false)
+  const [popular, setPopular] = React.useState([])
   const [plus, setPlus] = React.useState(false)
   
   const path = 'https://image.tmdb.org/t/p/w300'
+ 
 
-  console.log(capa);
-  
+  React.useEffect( () => {
+
+    async function fetchData(){
+      const res = await getMoviesPopular()
+      const json = res.data
+
+      setPopular(json.results.slice(0, 6));
+    }
+
+    fetchData()
+
+  },[])
 
   React.useEffect(()=>{
 
@@ -49,43 +63,48 @@ function Home() {
   const togglePlus = () => setPlus(!plus)
 
   return (
-    <section className="">
+    <main>
+      <section className="p-5">
 
-      <div className="flex items-center justify-around gap-1 p-5 h-fit [&>*]:text-white">
-        <div className='w-fit p-2 flex flex-col h-full gap-10'>
-          <div className='flex flex-col gap-2'>
-            <h1 className="text-6xl">{capa.title}</h1>
-            <p className='w-[500px]'>{capa.overview}</p>
+          <div className="flex items-center  justify-around sm-gap-80 p-5 h-fit [&>*]:text-white">
+            <div className='w-fit p-2 flex flex-col h-full gap-10'>
+              <div className='flex flex-col gap-4'>
+                <h1 className="text-6xl">{capa.title ? capa.title : capa.name}</h1>
+                <p className='w-[500px]'>{capa.overview}</p>
+              </div>
+
+              <div className='flex gap-50'>
+                <h2 className='flex flex-col items-start'><span className='text-6xl font-bold'>{capa.vote_average}</span> <span>MÉDIA DE VOTOS</span></h2>
+                <h2 className='flex flex-col items-start'><span className='text-6xl font-bold'>{capa.vote_count}</span> <span>VOTOS</span></h2>
+              </div>
+
+              <div className='flex gap-14 justify-start items-center'>
+                  <button 
+                      onClick={toggleFavorite} 
+                      className="flex items-center justify-center p-2 bg-red-500 hover:bg-red-600 rounded-full w-12 h-12 transition-all"
+                    >
+                      <HeartIcon fill={favorite ? "#ffffff" : "none"} />
+                  </button>
+
+                  <button 
+                      onClick={togglePlus} 
+                      className="flex items-center justify-center p-2 bg-none border border-white hover:bg-white/5 hover:stroke-white text-black rounded-full w-12 h-12 transition-all"
+                    >
+                      <PlusIcon fill={favorite ? "#333" : "none"} />
+                  </button>
+              </div>
+            </div>
+            <img
+              src={`${path}${capa.poster_path}`}
+              alt="Imagem de fundo"
+              className=' right-0 rounded'
+            />
           </div>
 
-          <div className='flex gap-50'>
-            <h2 className='flex flex-col items-start'><span className='text-6xl font-bold'>{capa.vote_average}</span> <span>MÉDIA DE VOTOS</span></h2>
-            <h2 className='flex flex-col items-start'><span className='text-6xl font-bold'>{capa.vote_count}</span> <span>VOTOS</span></h2>
-          </div>
+      </section>
 
-          <div className='flex gap-14 justify-start items-center'>
-              <button 
-                  onClick={toggleFavorite} 
-                  className="flex items-center justify-center p-2 bg-red-500 hover:bg-red-600 rounded-full w-12 h-12 transition-all"
-                >
-                  <HeartIcon fill={favorite ? "#ffffff" : "none"} />
-              </button>
-
-              <button 
-                  onClick={togglePlus} 
-                  className="flex items-center justify-center p-2 bg-none border border-white hover:bg-white/5 hover:stroke-white text-black rounded-full w-12 h-12 transition-all"
-                >
-                  <PlusIcon fill={favorite ? "#333" : "none"} />
-              </button>
-          </div>
-        </div>
-        <img
-          src={`${path}${capa.poster_path}`}
-          alt="Imagem de fundo"
-          className=' right-0 rounded'
-        />
-      </div>
-    </section>
+      <SectionFilms title={'ver mais'} data={popular}/>
+    </main>
 
   )
 }
